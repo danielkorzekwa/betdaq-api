@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean id="betDaq" class="dk.bot.betdaq.BetDaqImpl">
+		<constructor-arg ref="readOnlyService" />
+		<constructor-arg ref="secureService" />
+	</bean>
+	
+	<!-- BetDaq web services -->
+	<bean id="readOnlyServiceFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
+		<property name="serviceClass" value="com.globalbettingexchange.externalapi.ReadOnlyService" />
+		<property name="address" value="https://api.betdaq.com/v2.0/ReadOnlyService.asmx" />
+	</bean>
+	<bean id="readOnlyService"
+		class="com.globalbettingexchange.externalapi.ReadOnlyService"
+		factory-bean="readOnlyServiceFactory" factory-method="create" />
+		
+		<bean id="secureServiceFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
+		<property name="serviceClass" value="com.globalbettingexchange.externalapi.SecureService" />
+		<property name="address" value="https://api.betdaq.com/v2.0/Secure/SecureService.asmx" />
+	</bean>
+	<bean id="secureService"
+		class="com.globalbettingexchange.externalapi.SecureService"
+		factory-bean="secureServiceFactory" factory-method="create" />
+	
+</beans>
